@@ -15,12 +15,4 @@
 
         </div>
     </section>
-
-    <script>
-        function toggleTimeLimitFields() {
-            const checkbox = document.getElementById('limitedTime');
-            const timeLimitFields = document.getElementById('timeLimitFields');
-            timeLimitFields.classList.toggle('hidden', !checkbox.checked);
-        }
-    </script>
 @endsection
