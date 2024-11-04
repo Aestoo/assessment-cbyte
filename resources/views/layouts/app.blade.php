@@ -10,11 +10,11 @@
 <div class="flex flex-col h-screen justify-between">
     <header class="h-15 bg-gray-900 text-white fixed w-full z-10">
         <div class="container mx-auto flex p-2 justify-between items-center">
-            <h1 class="text-xl font-bold">{{ config('app.name', 'PassSecure') }}</h1>
+            <a  href="/" class="text-xl font-bold">{{ config('app.name', 'PassSecure') }}</a>
             <nav>
                 <div
                     class="flex flex-col md:flex-row my-2 me-2 border border-white hover:bg-gray-700 px-2 py-1 rounded-2xl ">
-                    <a href="/generate">Generate Link</a>
+                    <a href="/share-password">Share Password</a>
                 </div>
             </nav>
         </div>
