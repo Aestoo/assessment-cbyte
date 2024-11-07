@@ -5,24 +5,24 @@
         <label for="secret" class="block text-sm font-medium text-gray-700">Secret</label>
         <div class="relative">
             <input
-                id="password"
-                name="password"
+                id="secret"
+                name="secret"
                 type="password"
-                class="mt-1 block w-full p-2 border {{ $errors->has('password') ? 'border-red-600' : 'border-gray-300' }} rounded-md focus:outline-none focus:ring focus:ring-gray-700"
+                class="mt-1 block w-full p-2 border {{ $errors->has('secret') ? 'border-red-600' : 'border-gray-300' }} rounded-md focus:outline-none focus:ring focus:ring-gray-700"
                 required
-                placeholder="Password"
+                placeholder="Secret"
             />
 
 
         </div>
-        @error('password')
+        @error('secret')
         <span class="text-red-600 text-sm">{{ $message }}</span>
         @enderror
     </div>
 
 
     <div class="flex flex-wrap mt-4">
-        <div class="w-full sm:w-1/3 sm:pe-2">
+        <div class="w-full sm:w-1/3 sm:pe-2 pt-2">
             <label for="amountOfUsages" class="block text-sm font-medium text-gray-700">Amount of Usages</label>
             <input
                 id="amountOfUsages"
@@ -40,7 +40,7 @@
 
         </div>
 
-        <div class="w-full sm:w-1/3 sm:px-1">
+        <div class="w-full sm:w-1/3 sm:px-1 pt-2">
             <label for="validForHours" class="block text-sm font-medium text-gray-700">Valid For (Hours)</label>
             <input
                 id="validForHours"
@@ -57,7 +57,7 @@
 
         </div>
 
-        <div class="w-full sm:w-1/3 sm:ps-2">
+        <div class="w-full sm:w-1/3 sm:ps-2 pt-2">
             <label for="validForMinutes" class="block text-sm font-medium text-gray-700">Valid For (Minutes)</label>
             <input
                 id="validForMinutes"
