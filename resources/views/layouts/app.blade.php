@@ -14,7 +14,7 @@
             <nav>
                 <div
                     class="flex flex-col md:flex-row my-2 me-2 border border-white hover:bg-gray-700 px-2 py-1 rounded-2xl ">
-                    <a href="/share-password">Share Password</a>
+                    <a href="/share-secret">Share Secret</a>
                 </div>
             </nav>
         </div>

@@ -6,18 +6,17 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
-class PasswordShareController extends Controller
+class SecretShareController extends Controller
 {
     public function index(): View
     {
-        return view('share-password');
+        return view('share-secret');
     }
 
     public function store(Request $request): RedirectResponse
     {
         $validatedData = $request->validate([
-            'password' => 'required|string',
-            'confirmPassword' => 'required|string|same:password',
+            'secret' => 'required|string',
             'amountOfUsages' => 'required|integer|min:1',
             'validForHours' => 'nullable|integer|min:0',
             'validForMinutes' => 'nullable|integer|min:0|max:59',

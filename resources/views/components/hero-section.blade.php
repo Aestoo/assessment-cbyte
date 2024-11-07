@@ -12,14 +12,14 @@
     </svg>
     <div class="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
         <h2 class="text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            PassSecure, <strong>Your</strong> trusted way to share passwords <strong class="text-green-400">safely</strong>.
+            PassSecure, <strong>Your</strong> trusted way to share secrets <strong class="text-green-400">safely</strong>.
         </h2>
         <p class="mt-6 text-pretty text-lg/6 text-gray-300">
-            With PassSecure, you can easily and securely share passwords without worrying about data breaches.
+            With PassSecure, you can easily and securely share secrets without worrying about data breaches.
             Our user-friendly interface ensures your information is always protected while giving you full control over how you share it.
         </p>
         <div class="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
-            <a href="/share-password" class="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+            <a href="/share-secret" class="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
                 Get started
             </a>
             <a href="#learnMore" class="text-sm/6 font-semibold text-white">Learn more <span aria-hidden="true">→</span></a>
