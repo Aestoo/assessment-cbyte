@@ -6,7 +6,7 @@ This is a simple Laravel application designed to securely share sensitive data (
 
 ## Features
 
-- **Expiration**: Set an expiration time for each secret, either in hours or minutes.
+- **Expiration**: Set an expiration time for each secret, either in hours and/or minutes.
 - **Usage Limit**: Control the number of times a secret can be accessed before it is automatically deleted.
 - **Signed URLs**: Generate secure, time-limited URLs to access the secret.
 - **Encryption**: All secrets are stored and shared securely with Laravel's built-in encryption.
