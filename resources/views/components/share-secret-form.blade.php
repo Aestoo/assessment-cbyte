@@ -1,6 +1,5 @@
 <form method="POST" action="{{route('secret.share.store')}}">
     @csrf
-
     <div class="w-full">
         <label for="secret" class="block text-sm font-medium text-gray-700">Secret</label>
         <div class="relative">
@@ -9,11 +8,8 @@
                 name="secret"
                 type="password"
                 class="mt-1 block w-full p-2 border {{ $errors->has('secret') ? 'border-red-600' : 'border-gray-300' }} rounded-md focus:outline-none focus:ring focus:ring-gray-700"
-                required
                 placeholder="Secret"
             />
-
-
         </div>
         @error('secret')
         <span class="text-red-600 text-sm">{{ $message }}</span>
@@ -28,15 +24,14 @@
                 id="amountOfUsages"
                 name="amountOfUsages"
                 type="number"
-                class="mt-1 block w-full p-2 border {{ $errors->has('amountOfUsage') ? 'border-red-600' : 'border-gray-300' }} rounded-md focus:outline-none focus:ring focus:ring-gray-700"
-                required
+                class="mt-1 block w-full p-2 border {{ $errors->has('amountOfUsages') ? 'border-red-600' : 'border-gray-300' }} rounded-md focus:outline-none focus:ring focus:ring-gray-700"
                 placeholder="1"
                 value="{{ old('amountOfUsages') }}"
             />
             @error('amountOfUsages')
             <span class="text-red-600 text-sm">{{ $message }}</span>
             @enderror
-            <p class="text-sm text-gray-400 mt-1">Leave empty for unlimited minutes</p>
+            <p class="text-sm text-gray-400 mt-1">Leave empty for unlimited amount of link usages</p>
 
         </div>
 
