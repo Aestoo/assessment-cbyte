@@ -6,6 +6,7 @@ use App\Models\Secret;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -41,7 +42,7 @@ class SecretShareController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validatedData = $request->validate([
-            'secret' => 'required|string',
+            'secret' => 'required|string|max:49000',
             'amountOfUsages' => 'nullable|integer|min:1',
             'validForHours' => 'nullable|integer|min:0',
             'validForMinutes' => 'nullable|integer|min:0|max:59',
@@ -54,11 +55,18 @@ class SecretShareController extends Controller
                 ->addMinutes((int)$validatedData['validForMinutes'] ?? 0);
         }
 
-        $secret = Secret::create([
-            'secret' => $validatedData['secret'],
-            'usageAmount' => $validatedData['amountOfUsages'],
-            'expires_at' => $expiresAt,
-        ]);
+        try {
+            $secret = Secret::create([
+                'secret' => $validatedData['secret'],
+                'usageAmount' => $validatedData['amountOfUsages'],
+                'expires_at' => $expiresAt,
+            ]);
+        } catch (QueryException $e) {
+            if ($e->getCode() == 1406) {
+                return redirect()->back()->withErrors(['secret' => 'The secret is too large to be stored. Please shorten it.']);
+            }
+            return redirect()->back()->withErrors(['secret' => 'An error occurred while storing the secret.']);
+        }
 
         if ($expiresAt) {
             $signedUrl = URL::temporarySignedRoute(
@@ -78,7 +86,4 @@ class SecretShareController extends Controller
 
         return redirect()->route('created.secret');
     }
-
-
-
 }
