@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->text('secret');
             $table->integer('usageAmount')->nullable();
-            $table->timestamp('expires_at')->nullable();
+            $table->timestamp('expiresAt')->nullable();
             $table->timestamps();
         });
     }

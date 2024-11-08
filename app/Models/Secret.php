@@ -10,9 +10,12 @@ class Secret extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['secret', 'usageAmount', 'expires_at'];
+    protected $fillable = ['secret', 'usageAmount', 'expiresAt'];
     protected $hidden = ['secret'];
-
+    protected $casts = [
+        'usageAmount' => 'integer',
+        'expiresAt' => 'datetime',
+    ];
     public function getSecretAttribute($value): string
     {
         return Crypt::decryptString($value);

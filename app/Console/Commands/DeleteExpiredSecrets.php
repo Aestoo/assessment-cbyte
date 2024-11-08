@@ -28,7 +28,7 @@ class DeleteExpiredSecrets extends Command
      */
     public function handle()
     {
-        $secretsDeleted = Secret::where('expires_at', '<', Carbon::now('UTC'))->delete();
+        $secretsDeleted = Secret::where('expiresAt', '<', Carbon::now('UTC'))->delete();
         Log::info('Deleted ' . $secretsDeleted . ' secrets.');
     }
 }

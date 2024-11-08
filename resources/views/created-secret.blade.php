@@ -49,7 +49,7 @@
                         <h2 class="text-lg font-semibold">Expires At</h2>
                         <p class="mt-1">
                             @if($expiresAt)
-                                <span id="expires-at" data-utc="{{ Carbon::parse($expiresAt)->toIso8601String() }}"></span>
+                            {{ Carbon::parse($expiresAt)->setTimezone('Europe/Amsterdam')->format('d-m-Y, H:i') }}
                         @else
                             <p>Not Set</p>
                         @endif
@@ -58,35 +58,24 @@
                 </div>
             @endif
         </div>
+        <div id="toast" style="display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background-color: #4CAF50; color: white; padding: 10px 20px; border-radius: 5px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+            URL copied to clipboard!
+        </div>
     </section>
 
     <script>
         function copyToClipboard() {
             const context = document.getElementById('secretContext').innerText;
-            if(context){
+            if (context) {
                 navigator.clipboard.writeText(context).then(() => {
-                    alert('URL copied to clipboard!');
+                    const toast = document.getElementById('toast');
+                    toast.style.display = 'block';
+
+                    setTimeout(() => {
+                        toast.style.display = 'none';
+                    }, 3000);
                 });
             }
         }
-
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const expiresAtElement = document.getElementById('expires-at');
-            console.log("EXPIRES AT", expiresAtElement)
-            if (expiresAtElement) {
-                const utcDate = expiresAtElement.getAttribute('data-utc');
-                const localDate = new Date(utcDate);
-
-                expiresAtElement.textContent = localDate.toLocaleString('nl-NL', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: false,
-                });
-            }
-        });
     </script>
 @endsection

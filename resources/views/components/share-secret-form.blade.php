@@ -9,6 +9,7 @@
                 type="text"
                 class="mt-1 block w-full p-2 border {{ $errors->has('secret') ? 'border-red-600' : 'border-gray-300' }} rounded-md focus:outline-none focus:ring focus:ring-gray-700"
                 placeholder="Secret"
+                value="{{ old('secret') }}"
             />
         </div>
         @error('secret')
@@ -71,7 +72,13 @@
     </div>
 
 
-
+    @if ($errors->has("sqlError"))
+        <div class="alert alert-error mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+            @error('sqlError')
+            <span class="text-red-600 text-sm">{{ $message }}</span>
+            @enderror
+        </div>
+    @endif
 
     <div class="mt-6">
         <button type="submit"
