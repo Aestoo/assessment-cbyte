@@ -38,7 +38,7 @@ class SecretShareController extends Controller
     }
 
     public function created(): View|Factory|Application
-    {;
+    {
         $message = session('message');
         $signedUrl = session('signedUrl');
         $usageAmount = session('usageAmount');
@@ -50,53 +50,98 @@ class SecretShareController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $validatedData = $request->validate([
-            'secret' => 'required|string|max:49000',
-            'amountOfUsages' => 'nullable|integer|min:1|max:2147483647',
-            'validForHours' => 'nullable|integer|min:0',
-            'validForMinutes' => 'nullable|integer|min:0|max:59',
-        ]);
+        $validatedData = $this->validateRequest($request);
 
-        $expiresAt = null;
-        if ((int)$validatedData['validForHours'] > 0 || (int)$validatedData['validForMinutes'] > 0) {
-            $expiresAt = Carbon::now('UTC')
-                ->addHours((int)$validatedData['validForHours'] ?? 0)
-                ->addMinutes((int)$validatedData['validForMinutes'] ?? 0);
+        $expiresAt = $this->calculateExpiration($validatedData);
 
-            $maxDate = Carbon::now('UTC')->addYears(100);
-            if ($expiresAt > $maxDate) {
-                return redirect()->back()->withErrors(['validForHours' => 'The expiration date is too far in the future. Please choose a shorter duration.']);
-            }
+        if ($expiresAt && $this->isExpirationTooFar($expiresAt)) {
+            return redirect()->back()->withErrors([
+                'validForHours' => 'The expiration date is too far in the future. Please choose a shorter duration.',
+            ]);
         }
 
         try {
-            $secret = Secret::create([
-                'secret' => $validatedData['secret'],
-                'usageAmount' => $validatedData['amountOfUsages'],
-                'expiresAt' => $expiresAt,
-            ]);
+            $secret = $this->createSecret($validatedData, $expiresAt);
         } catch (QueryException $e) {
-            if ($e->getCode() == 1406) {
-                return redirect()->back()->withErrors(['secret' => 'The secret is too large to be stored. Please shorten it.']);
-            }
-            return redirect()->back()->withErrors(['sqlError' => 'An error occurred while storing the secret.']);
+            return $this->handleDatabaseError($e);
         }
 
+        $signedUrl = $this->generateSignedUrl($secret, $expiresAt);
+
+        $this->storeSessionData($signedUrl, $secret, $expiresAt);
+
+        return redirect()->route('created.secret');
+    }
+
+    private function validateRequest(Request $request): array
+    {
+        return $request->validate([
+            'secret' => 'required|string|max:49000',
+            'amountOfUsages' => 'nullable|integer|min:1|max:2147483647',
+            'validForHours' => 'nullable|integer|min:1|max:214748364',
+            'validForMinutes' => 'nullable|integer|min:1|max:59',
+        ]);
+    }
+
+    private function calculateExpiration(array $validatedData): ?Carbon
+    {
+        if ((int)$validatedData['validForHours'] > 0 || (int)$validatedData['validForMinutes'] > 0) {
+            return Carbon::now('UTC')
+                ->addHours((int)$validatedData['validForHours'] ?? 0)
+                ->addMinutes((int)$validatedData['validForMinutes'] ?? 0);
+        }
+
+        return null;
+    }
+
+    private function isExpirationTooFar(Carbon $expiresAt): bool
+    {
+        $maxDate = Carbon::now('UTC')->addYears(100);
+        return $expiresAt > $maxDate;
+    }
+
+    private function createSecret(array $validatedData, ?Carbon $expiresAt): Secret
+    {
+        return Secret::create([
+            'secret' => $validatedData['secret'],
+            'usageAmount' => $validatedData['amountOfUsages'],
+            'expiresAt' => $expiresAt,
+        ]);
+    }
+
+    private function handleDatabaseError(QueryException $e): RedirectResponse
+    {
+        if ($e->getCode() == 1406) {
+            return redirect()->back()->withErrors([
+                'secret' => 'The secret is too large to be stored. Please shorten it.',
+            ]);
+        }
+
+        return redirect()->back()->withErrors([
+            'sqlError' => 'An error occurred while storing the secret.',
+        ]);
+    }
+
+    private function generateSignedUrl(Secret $secret, ?Carbon $expiresAt): string
+    {
         if ($expiresAt) {
-            $signedUrl = URL::temporarySignedRoute(
+            return URL::temporarySignedRoute(
                 'secrets.show',
                 $expiresAt,
                 ['secret' => $secret->id]
             );
-        } else {
-            $signedUrl = URL::signedRoute('secrets.show', ['secret' => $secret->id]);
         }
+
+        return URL::signedRoute('secrets.show', ['secret' => $secret->id]);
+    }
+
+    private function storeSessionData(string $signedUrl, Secret $secret, ?Carbon $expiresAt): void
+    {
         session([
             'signedUrl' => $signedUrl,
             'usageAmount' => $secret->usageAmount,
             'expiresAt' => $expiresAt?->toDateTimeString(),
         ]);
-
-        return redirect()->route('created.secret');
     }
+
 }
