@@ -6,7 +6,7 @@
             <input
                 id="secret"
                 name="secret"
-                type="password"
+                type="text"
                 class="mt-1 block w-full p-2 border {{ $errors->has('secret') ? 'border-red-600' : 'border-gray-300' }} rounded-md focus:outline-none focus:ring focus:ring-gray-700"
                 placeholder="Secret"
             />

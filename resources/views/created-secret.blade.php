@@ -29,7 +29,7 @@
                     </div>
 
                     <div class="relative bg-gray-100 p-4 rounded-lg shadow-md">
-                        <p onclick="copyToClipboard()" id="signedUrl" class="text-blue-500 break-words cursor-pointer">
+                        <p onclick="copyToClipboard()" id="secretContext" class="text-blue-500 break-words cursor-pointer">
                             {{ $signedUrl }}
                         </p>
                         <button onclick="copyToClipboard()"
@@ -62,20 +62,21 @@
 
     <script>
         function copyToClipboard() {
-            const url = document.getElementById('signedUrl').innerText;
-            navigator.clipboard.writeText(url).then(() => {
-                alert('URL copied to clipboard!');
-            });
+            const context = document.getElementById('secretContext').innerText;
+            if(context){
+                navigator.clipboard.writeText(context).then(() => {
+                    alert('URL copied to clipboard!');
+                });
+            }
         }
+
 
         document.addEventListener('DOMContentLoaded', function () {
             const expiresAtElement = document.getElementById('expires-at');
             console.log("EXPIRES AT", expiresAtElement)
             if (expiresAtElement) {
                 const utcDate = expiresAtElement.getAttribute('data-utc');
-                console.log("UTC DATE", utcDate);
                 const localDate = new Date(utcDate);
-                console.log("Converted Date:", localDate);
 
                 expiresAtElement.textContent = localDate.toLocaleString('nl-NL', {
                     day: '2-digit',

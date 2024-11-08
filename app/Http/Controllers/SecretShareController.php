@@ -22,7 +22,7 @@ class SecretShareController extends Controller
 
     public function show(Secret $secret): View|Factory|Application
     {
-        if ($secret->expires_at && $secret->expires_at->isPast()) {
+        if ($secret->expires_at && Carbon::parse($secret->expires_at)->setTimezone('UTC')->isPast()) {
             abort(404, 'This secret has expired.');
         }
         return view('show-secret', compact('secret'));
